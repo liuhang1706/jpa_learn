@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- ==========================   配置spring和spring data jpa   ==============     -->
+    <!-- 配置 entityManagerFactory交给容器管理 -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置扫描的包（实体类所在的包） -->
+        <property name="packagesToScan" value="com.liuhang.springdatajpa.domain"/>
+        <!-- 配置jpa的实现厂家 -->
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+        </property>
+        <!-- 配置jpa供应商适配器 -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="database" value="MYSQL"/>
+                <!-- 是否需要自动创建数据库表 -->
+                <property name="generateDdl" value="false"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+                <property name="showSql" value="true"/>
+            </bean>
+        </property>
+        <!-- 配置jpa方言：jpa的高级特性-->
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+    </bean>
+
+    <!-- 数据库连接池-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="root"/>
+        <property name="password" value=";Flzxsqc1"/>
+        <property name="jdbcUrl" value="jdbc:mysql://192.168.1.8:3306/db_jpa?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+    </bean>
+
+    <!-- 整合spring data jpa
+            base-package：配置dao层接口所在的包
+    -->
+    <jpa:repositories base-package="com.liuhang.springdatajpa.dao"
+                      entity-manager-factory-ref="entityManagerFactory"
+                      transaction-manager-ref="transactionManager"/>
+
+    <!-- 配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- 配置声明式事务-->
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            <tx:method name="save*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="insert*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="update*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="delete*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="get*" read-only="true"/>-->
+<!--            <tx:method name="find*" read-only="true"/>-->
+<!--            <tx:method name="*" propagation="REQUIRED"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+
+    <!-- 配置AOP-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="piintcut" expression="execution(* com.liuhang.springdatajpa.service.*.*(..))"/>-->
+<!--        <aop:advisor advice-ref="txAdvice" pointcut-ref="piintcut"/>-->
+<!--    </aop:config>-->
+
+    <!-- 配置包扫描，在指定包下扫描Spring注解-->
+    <context:component-scan base-package="com.liuhang.springdatajpa"/>
+</beans>

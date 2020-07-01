@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.liuhang.jpa</groupId>
+    <artifactId>jpa_learn</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>jpa_day01</module>
+        <module>jpa_day02_spring_data_jpa</module>
+        <module>jpa_day03_spec</module>
+        <module>jpa_day04_01_oneToMany</module>
+        <module>jpa_day04_02_manyToMany</module>
+    </modules>
+
+
+</project>
